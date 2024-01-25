@@ -23,3 +23,58 @@ items := []map[string]dynamotypes.AttributeValue{
     },
     // Additional items can be added here
 }
+
+wantJSON := []byte(`[
+    {
+        "StringField": {
+            "S": "StringValue"
+        },
+        "NumberField": {
+            "N": "123"
+        },
+        "FloatField": {
+            "N": "123.45"
+        },
+        "MapField": {
+            "M": {
+                "NestedString": {
+                    "S": "NestedValue"
+                },
+                "NestedNumber": {
+                    "N": "456"
+                }
+            }
+        },
+        "ListField": {
+            "L": [
+                {
+                    "S": "ListString"
+                },
+                {
+                    "N": "789"
+                }
+            ]
+        },
+        "StringSetField": {
+            "SS": [
+                "str1",
+                "str2"
+            ]
+        },
+        "NumberSetField": {
+            "NS": [
+                "100",
+                "200"
+            ]
+        },
+        "BinaryField": {
+            "B": "QmluYXJ5RGF0YQ=="
+        },
+        "BoolField": {
+            "BOOL": true
+        },
+        "NullField": {
+            "NULL": true
+        }
+    }
+]`)
