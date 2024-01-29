@@ -1,14 +1,14 @@
-I’ve been watching your progress as a Drexel Co-Op in our team, and I’m genuinely impressed by the way you’ve embraced new challenges. Moving from your comfort zone in data analysis to actively learning about software development, git, AWS, containers, and Go is no small feat. Your energy and curiosity are commendable, and I wanted to share some feedback in a 'Continue, Start, Stop' format to support your ongoing development.
+As we reach the midpoint of your Co-Op term, I've been reflecting on your progress and achievements, and I must say, your growth has been remarkable. Your journey in learning Go and its application in creating AWS Lambda functions, especially those interacting with our Bitbucket and Bamboo servers through event-based webhooks, showcases your ability to quickly adapt and learn. I wanted to share some feedback in a 'Continue, Start, Stop' format that might help you as you progress further.
 
 Continue:
 
-Your inquisitive nature is one of your greatest strengths. Keep asking questions and diving deep into the fundamentals of software development. This approach not only enhances your understanding but also contributes positively to our team dynamic.
-Your eagerness to understand the intricacies of each topic you encounter is impressive. This attitude is crucial in the tech field and will serve you well in your career.
+The way you've been applying your newfound knowledge in real-world scenarios is impressive. Continue to build and experiment with what you’ve learned. This practical application is crucial in understanding and mastering new technologies.
+Your curiosity and iterative approach to software development and cloud infrastructure are key strengths. Keep harnessing these traits as they're essential for continuous learning and improvement in our field.
 Start:
 
-A personal suggestion: consider keeping written notes in a notebook during your learning process. I found that summarizing these notes into more formal ones later and storing them in an easily accessible format (like 'notes' on a computer) greatly helped me grasp concepts quickly. It’s a great way to organize your thoughts and can be a handy reference as you continue to learn.
+A piece of advice that served me well: consider jotting down notes by hand during your learning process. Later, you can organize these notes on your laptop for quick access. This method not only helps in retaining information but also in building a personal knowledge base that you can refer to easily.
 Stop:
 
 N/A
-You’re doing an incredible job, Kelsey. Your transition into more complex areas of software development is a clear indication of your potential and adaptability. I’m looking forward to seeing your continuous growth and how you apply these new skills going forward.
+Your rapid acquisition of skills in webhooks, CI/CD, Makefiles, Bash, git, AWS, and micro-systems architecture is quite an achievement, especially considering the short time frame. It’s exciting to watch your journey and see the contributions you’re making. Keep up the great work, Ethan. Your enthusiasm and eagerness to learn are exactly what make our team stronger.
 
