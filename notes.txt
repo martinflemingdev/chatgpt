@@ -1,14 +1,13 @@
-As we reach the midpoint of your Co-Op term, I've been reflecting on your progress and achievements, and I must say, your growth has been remarkable. Your journey in learning Go and its application in creating AWS Lambda functions, especially those interacting with our Bitbucket and Bamboo servers through event-based webhooks, showcases your ability to quickly adapt and learn. I wanted to share some feedback in a 'Continue, Start, Stop' format that might help you as you progress further.
+I've been reflecting on the dynamic within our broader team, and even though we haven't had the chance to work closely over the past year, I've noticed your contributions to the Airflow team. I wanted to share some feedback in a 'Continue, Start, Stop' format, reflecting on your progress and potential areas for growth.
 
 Continue:
 
-The way you've been applying your newfound knowledge in real-world scenarios is impressive. Continue to build and experiment with what you’ve learned. This practical application is crucial in understanding and mastering new technologies.
-Your curiosity and iterative approach to software development and cloud infrastructure are key strengths. Keep harnessing these traits as they're essential for continuous learning and improvement in our field.
+Your pursuit of knowledge and improvement in areas related to Airflow, Kubernetes, AWS, and software development is commendable. Keep up this enthusiastic approach to learning and expanding your skill set.
+Your active engagement in asking questions and contributing to discussions is invaluable. This not only aids in your personal growth but also positively impacts the team. Your curiosity and willingness to explore different aspects of our work are key strengths.
 Start:
 
-A piece of advice that served me well: consider jotting down notes by hand during your learning process. Later, you can organize these notes on your laptop for quick access. This method not only helps in retaining information but also in building a personal knowledge base that you can refer to easily.
+Have you considered obtaining certifications in Kubernetes, Python, or AWS? These certifications could further solidify your expertise and open up new avenues for professional development. They can also be great milestones in your journey of continuous learning.
 Stop:
 
 N/A
-Your rapid acquisition of skills in webhooks, CI/CD, Makefiles, Bash, git, AWS, and micro-systems architecture is quite an achievement, especially considering the short time frame. It’s exciting to watch your journey and see the contributions you’re making. Keep up the great work, Ethan. Your enthusiasm and eagerness to learn are exactly what make our team stronger.
-
+It's always been a pleasure working with you, Brett. It's a bit of a shame we didn't get to collaborate much this past year, but I'm looking forward to possibly working together again in the future. Your positive attitude and dedication to your work are qualities that make you a valuable member of our team.
