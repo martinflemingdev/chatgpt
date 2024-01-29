@@ -1,13 +1,13 @@
-I've been reflecting on the dynamic within our broader team, and even though we haven't had the chance to work closely over the past year, I've noticed your contributions to the Airflow team. I wanted to share some feedback in a 'Continue, Start, Stop' format, reflecting on your progress and potential areas for growth.
+As I reflect on our teamwork and your contributions, I'm truly impressed by your continuous growth and can-do attitude. Your approach to work and learning is inspiring, and I wanted to share some feedback in a 'Continue, Start, Stop' format.
 
 Continue:
 
-Your pursuit of knowledge and improvement in areas related to Airflow, Kubernetes, AWS, and software development is commendable. Keep up this enthusiastic approach to learning and expanding your skill set.
-Your active engagement in asking questions and contributing to discussions is invaluable. This not only aids in your personal growth but also positively impacts the team. Your curiosity and willingness to explore different aspects of our work are key strengths.
+Your willingness to experiment with new approaches and technologies is a testament to your innovative mindset. I greatly admire your out-of-the-box thinking – it’s a valuable asset to our team.
+Congratulations on getting dbt certified and earning the Hashicorp Certified Terraform Associate certification this year. These achievements highlight your commitment to continuous learning and staying ahead in your field.
 Start:
 
-Have you considered obtaining certifications in Kubernetes, Python, or AWS? These certifications could further solidify your expertise and open up new avenues for professional development. They can also be great milestones in your journey of continuous learning.
+Given your skills and positive attitude, I encourage you to consider taking on more leadership roles. You have the potential to be an excellent leader. If leadership is a path you’re interested in, maybe start delving into leadership-focused reading and learning. It could provide you with great insights and tools for the future.
 Stop:
 
-N/A
-It's always been a pleasure working with you, Brett. It's a bit of a shame we didn't get to collaborate much this past year, but I'm looking forward to possibly working together again in the future. Your positive attitude and dedication to your work are qualities that make you a valuable member of our team.
+I suggest moving away from updating our dashboard manually. Automating it end-to-end will be a significant efficiency gain for us. It's a project that aligns well with your skill set and could be a great opportunity to apply your knowledge.
+Working with you has always been a fantastic experience, Josh. Your intelligence, friendliness, and ability to keep up with rapidly evolving technology trends make you an invaluable member of our team. I’m excited to see your continued growth and the innovative solutions you’ll bring to our future projects.
