@@ -1,0 +1,14 @@
+I’ve been watching your progress as a Drexel Co-Op in our team, and I’m genuinely impressed by the way you’ve embraced new challenges. Moving from your comfort zone in data analysis to actively learning about software development, git, AWS, containers, and Go is no small feat. Your energy and curiosity are commendable, and I wanted to share some feedback in a 'Continue, Start, Stop' format to support your ongoing development.
+
+Continue:
+
+Your inquisitive nature is one of your greatest strengths. Keep asking questions and diving deep into the fundamentals of software development. This approach not only enhances your understanding but also contributes positively to our team dynamic.
+Your eagerness to understand the intricacies of each topic you encounter is impressive. This attitude is crucial in the tech field and will serve you well in your career.
+Start:
+
+A personal suggestion: consider keeping written notes in a notebook during your learning process. I found that summarizing these notes into more formal ones later and storing them in an easily accessible format (like 'notes' on a computer) greatly helped me grasp concepts quickly. It’s a great way to organize your thoughts and can be a handy reference as you continue to learn.
+Stop:
+
+N/A
+You’re doing an incredible job, Kelsey. Your transition into more complex areas of software development is a clear indication of your potential and adaptability. I’m looking forward to seeing your continuous growth and how you apply these new skills going forward.
+
