@@ -1,17 +1,19 @@
 import boto3
+from botocore.exceptions import NoCredentialsError
 
-def assume_role(role_arn, session_name, aws_access_key_id, aws_secret_access_key):
-    sts_client = boto3.client(
-        'sts',
-        aws_access_key_id=aws_access_key_id,
-        aws_secret_access_key=aws_secret_access_key
-    )
-    assumed_role_object = sts_client.assume_role(
-        RoleArn=role_arn,
-        RoleSessionName=session_name
-    )
-    credentials = assumed_role_object['Credentials']
-    return credentials
+def assume_role_with_profile(profile_name, role_arn, session_name):
+    try:
+        session = boto3.Session(profile_name=profile_name)
+        sts_client = session.client('sts')
+        assumed_role_object = sts_client.assume_role(
+            RoleArn=role_arn,
+            RoleSessionName=session_name
+        )
+        credentials = assumed_role_object['Credentials']
+        return credentials
+    except NoCredentialsError:
+        print("Credentials not found for profile:", profile_name)
+        raise
 
 def get_dynamodb_resource(credentials):
     return boto3.resource(
@@ -37,9 +39,8 @@ def get_all_attributes(table_name, dynamodb_resource):
 
     return attributes
 
-# Replace with your static IAM user credentials
-aws_access_key_id = 'your_access_key_id'
-aws_secret_access_key = 'your_secret_access_key'
+# Replace with your AWS profile name
+profile_name = 'your_profile_name'
 
 # Replace with your role ARN and a session name
 role_arn = 'your_role_arn'
@@ -48,12 +49,15 @@ session_name = 'your_session_name'
 # Replace with your table name
 table_name = 'your_table_name'
 
-# Assume the role using static IAM user credentials
-credentials = assume_role(role_arn, session_name, aws_access_key_id, aws_secret_access_key)
+# Assume the role using the AWS profile
+try:
+    credentials = assume_role_with_profile(profile_name, role_arn, session_name)
 
-# Get DynamoDB resource using the assumed role credentials
-dynamodb_resource = get_dynamodb_resource(credentials)
+    # Get DynamoDB resource using the assumed role credentials
+    dynamodb_resource = get_dynamodb_resource(credentials)
 
-# Get all attributes
-all_attributes = get_all_attributes(table_name, dynamodb_resource)
-print(all_attributes)
+    # Get all attributes
+    all_attributes = get_all_attributes(table_name, dynamodb_resource)
+    print(all_attributes)
+except NoCredentialsError:
+    print("Failed to assume role.")
