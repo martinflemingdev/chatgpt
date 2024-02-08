@@ -1,82 +1,82 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+    "context"
+    "fmt"
+    "github.com/aws/aws-sdk-go-v2/aws"
+    "github.com/aws/aws-sdk-go-v2/config"
+    "github.com/aws/aws-sdk-go-v2/service/dynamodb"
+    "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-// QueryDynamoDBForAttributes queries a DynamoDB table for specific attributes based on partition and sort key
-func QueryDynamoDBForAttributes(ctx context.Context, dynamoClient *dynamodb.Client, tableName string, partitionKeyName string, partitionKeyValue string, sortKeyName string, sortKeyValue string, attributes []string) ([]map[string]types.AttributeValue, error) {
-	// Construct the query input
-	keyConditionExpression := fmt.Sprintf("%s = :pkval AND %s = :skval", partitionKeyName, sortKeyName)
-	expressionAttributeValues := map[string]types.AttributeValue{
-		":pkval": &types.AttributeValueMemberS{Value: partitionKeyValue},
-		":skval": &types.AttributeValueMemberS{Value: sortKeyValue},
-	}
+// buildProjectionExpression builds the ProjectionExpression and ExpressionAttributeNames for a DynamoDB query
+func buildProjectionExpression(attributes []string) (string, map[string]string) {
+    projExpression := ""
+    expressionAttributeNames := make(map[string]string)
+    for i, attr := range attributes {
+        if i > 0 {
+            projExpression += ", "
+        }
+        placeholder := fmt.Sprintf("#attr%d", i)
+        projExpression += placeholder
+        expressionAttributeNames[placeholder] = attr
+    }
+    return projExpression, expressionAttributeNames
+}
 
-	projExpression := ""
-	for i, attr := range attributes {
-		if i > 0 {
-			projExpression += ", "
-		}
-		projExpression += fmt.Sprintf("#attr%d", i)
-		expressionAttributeValues[fmt.Sprintf(":attr%dval", i)] = &types.AttributeValueMemberS{Value: attr}
-	}
-	expressionAttributeNames := make(map[string]string)
-	for i, attr := range attributes {
-		expressionAttributeNames[fmt.Sprintf("#attr%d", i)] = attr
-	}
+// QueryDynamoDBForAttributesWithBeginsWith queries a DynamoDB table for specific attributes based on partition key and a sort key that begins with a specified value
+func QueryDynamoDBForAttributesWithBeginsWith(ctx context.Context, dynamoClient *dynamodb.Client, tableName string, partitionKeyName string, partitionKeyValue string, sortKeyName string, sortKeyPrefix string, attributes []string) ([]map[string]types.AttributeValue, error) {
+    keyConditionExpression := fmt.Sprintf("%s = :pkval AND begins_with(%s, :skprefix)", partitionKeyName, sortKeyName)
+    expressionAttributeValues := map[string]types.AttributeValue{
+        ":pkval":    &types.AttributeValueMemberS{Value: partitionKeyValue},
+        ":skprefix": &types.AttributeValueMemberS{Value: sortKeyPrefix},
+    }
 
-	input := &dynamodb.QueryInput{
-		TableName:                 aws.String(tableName),
-		KeyConditionExpression:    aws.String(keyConditionExpression),
-		ExpressionAttributeValues: expressionAttributeValues,
-		ProjectionExpression:      aws.String(projExpression),
-		ExpressionAttributeNames:  expressionAttributeNames,
-	}
+    projExpression, expressionAttributeNames := buildProjectionExpression(attributes)
 
-	// Execute the query
-	result, err := dynamoClient.Query(ctx, input)
-	if err != nil {
-		return nil, err
-	}
+    input := &dynamodb.QueryInput{
+        TableName:                 aws.String(tableName),
+        KeyConditionExpression:    aws.String(keyConditionExpression),
+        ExpressionAttributeValues: expressionAttributeValues,
+        ProjectionExpression:      aws.String(projExpression),
+        ExpressionAttributeNames:  expressionAttributeNames,
+    }
 
-	return result.Items, nil
+    result, err := dynamoClient.Query(ctx, input)
+    if err != nil {
+        return nil, err
+    }
+
+    return result.Items, nil
 }
 
 func main() {
-	ctx := context.TODO()
+    ctx := context.TODO()
 
-	// Load the AWS default config
-	cfg, err := config.LoadDefaultConfig(ctx)
-	if err != nil {
-		fmt.Println("error loading AWS config:", err)
-		return
-	}
+    cfg, err := config.LoadDefaultConfig(ctx)
+    if err != nil {
+        fmt.Println("error loading AWS config:", err)
+        return
+    }
 
-	// Create a DynamoDB client
-	dynamoClient := dynamodb.NewFromConfig(cfg)
+    dynamoClient := dynamodb.NewFromConfig(cfg)
 
-	// Example usage
-	tableName := "YourTableName"
-	partitionKeyName := "YourPartitionKeyName"
-	partitionKeyValue := "YourPartitionKeyValue"
-	sortKeyName := "YourSortKeyName"
-	sortKeyValue := "YourSortKeyValue"
-	attributes := []string{"atr1", "atr2", "atr3"} // Attributes you are interested in
+    tableName := "YourTableName"
+    partitionKeyName := "YourPartitionKeyName"
+    partitionKeyValue := "YourPartitionKeyValue"
+    sortKeyName := "YourSortKeyName"
+    sortKeyPrefix := "YourSortKeyPrefix"
+    attributes := []string{"atr1", "atr2", "atr3"}
 
-	items, err := QueryDynamoDBForAttributes(ctx, dynamoClient, tableName, partitionKeyName, partitionKeyValue, sortKeyName, sortKeyValue, attributes)
-	if err != nil {
-		fmt.Println("Query failed:", err)
-		return
-	}
+    items, err := QueryDynamoDBForAttributesWithBeginsWith(ctx, dynamoClient, tableName, partitionKeyName, partitionKeyValue, sortKeyName, sortKeyPrefix, attributes)
+    if err != nil {
+        fmt.Println("Query failed:", err)
+        return
+    }
 
-	fmt.Println("Query succeeded:", items)
+    fmt.Println("Query succeeded:", items)
 }
+
 
 // Important Points:
 // The ProjectionExpression is used to specify the attributes you want to get. However, to avoid conflicts with DynamoDB reserved words, 
