@@ -48,14 +48,17 @@ def extract_message_from_files(directory_path):
                 new_filename = f"{os.path.splitext(filename)[0]}_message.json"
                 new_file_path = os.path.join(directory_path, new_filename)
                 
-                # Save the "Message" to a new file
+                # Save the "Message" to a new file, formatted for readability
                 with open(new_file_path, 'w') as new_file:
-                    # Assuming the "Message" content is a string; adjust as necessary
-                    # If the "Message" is expected to be JSON, use json.dump(message_content, new_file)
-                    new_file.write(message_content)
+                    # Check if message_content is a string that needs to be loaded as JSON
+                    try:
+                        message_json = json.loads(message_content)
+                        json.dump(message_json, new_file, indent=4)
+                    except json.JSONDecodeError:
+                        # If message_content is not JSON, just write it as is
+                        new_file.write(message_content)
             else:
                 print(f'No "Message" found in {filename}')
-
 
 if __name__ == "__main__":
     directory_path = '/path/to/your/directory'  # Update this to your directory path
