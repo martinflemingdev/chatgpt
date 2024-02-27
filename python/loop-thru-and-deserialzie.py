@@ -28,6 +28,36 @@ def process_json_files(directory_path):
             else:
                 print(f'No "Records" found in {filename}')
 
+def extract_message_from_files(directory_path):
+    # Pattern to match files ending in "_record_0.json" or "_record_1.json"
+    file_endings = ("_record_0.json", "_record_1.json")
+    
+    for filename in os.listdir(directory_path):
+        if filename.endswith(file_endings):
+            file_path = os.path.join(directory_path, filename)
+            
+            # Open and read the JSON file
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+            
+            # Extract the "Message" field
+            if "Message" in data:
+                message_content = data["Message"]
+                
+                # Define a new filename for the message content
+                new_filename = f"{os.path.splitext(filename)[0]}_message.json"
+                new_file_path = os.path.join(directory_path, new_filename)
+                
+                # Save the "Message" to a new file
+                with open(new_file_path, 'w') as new_file:
+                    # Assuming the "Message" content is a string; adjust as necessary
+                    # If the "Message" is expected to be JSON, use json.dump(message_content, new_file)
+                    new_file.write(message_content)
+            else:
+                print(f'No "Message" found in {filename}')
+
+
 if __name__ == "__main__":
     directory_path = '/path/to/your/directory'  # Update this to your directory path
     process_json_files(directory_path)
+    extract_message_from_files(directory_path)
