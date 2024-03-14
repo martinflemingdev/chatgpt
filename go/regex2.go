@@ -16,12 +16,10 @@ func transformInput(input string) (string, error) {
         return "", fmt.Errorf("no Fn::Sub structures found")
     }
 
-    // Variable to keep track of how much the string has shifted
-    shift := 0
-
-    for _, match := range matches {
-        // Extracting the full match and the groups
-        fullMatch := input[match[0]:match[1]]
+    // Process matches in reverse to avoid index shifting issues
+    for i := len(matches) - 1; i >= 0; i-- {
+        match := matches[i]
+        // Extracting the template, variable name, and variable value
         template := input[match[4]:match[5]]
         variableName := input[match[6]:match[7]]
         variableValue := input[match[8]:match[9]]
@@ -30,15 +28,7 @@ func transformInput(input string) (string, error) {
         substituted := strings.Replace(template, fmt.Sprintf("${%s}", variableName), variableValue, -1)
 
         // Replace the original Fn::Sub section with the substituted value in the input string
-        before := input[:match[0]+shift]
-        after := input[match[1]+shift:]
-        input = before + fmt.Sprintf(`"%s"`, substituted) + after
-
-        // Calculate the new shift based on the difference in length between the original and substituted
-        shiftDiff := len(fmt.Sprintf(`"%s"`, substituted)) - len(fullMatch)
-
-        // Update the shift for the next iteration
-        shift += shiftDiff
+        input = input[:match[0]] + fmt.Sprintf(`"%s"`, substituted) + input[match[1]:]
     }
 
     return input, nil
