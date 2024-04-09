@@ -1,0 +1,1 @@
+SQS cannot directly trigger SNS: An SQS queue cannot directly send messages to an SNS topic. If you need to send a message from SQS to SNS, you would typically use a compute service like AWS Lambda. For example, you could set up a Lambda function that is triggered by new messages in an SQS queue, and this function could then publish a message to an SNS topic.
