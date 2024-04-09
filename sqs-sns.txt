@@ -1,1 +1,12 @@
 SQS cannot directly trigger SNS: An SQS queue cannot directly send messages to an SNS topic. If you need to send a message from SQS to SNS, you would typically use a compute service like AWS Lambda. For example, you could set up a Lambda function that is triggered by new messages in an SQS queue, and this function could then publish a message to an SNS topic.
+
+
+Yes, that statement is accurate within the context of AWS services as of my last update in April 2023. AWS SQS (Simple Queue Service) and AWS SNS (Simple Notification Service) are designed for different purposes, and their integration typically involves one-way communication from SNS to SQS, not directly the other way around.
+
+Here's a breakdown of the typical use cases and integration patterns:
+
+SNS to SQS: This is a common pattern where an SNS topic is used to fan out messages to multiple SQS queues. Each SQS queue subscribed to the SNS topic receives a copy of the message when it is published to the topic. This allows for decoupled, scalable architectures where messages can be processed asynchronously by different components.
+
+SQS to SNS: Direct integration in this direction is not supported by AWS. If you have a use case that requires sending a message from an SQS queue to an SNS topic, you would typically use an intermediary service like AWS Lambda. In this pattern, a Lambda function is triggered by new messages arriving in the SQS queue. The Lambda function then processes the message as needed and can publish a message to an SNS topic. This approach provides flexibility and allows for complex processing or conditional logic before the message is sent to the SNS topic.
+
+This integration pattern leveraging AWS Lambda enables a wide range of possibilities, including message transformation, filtering, or even invoking other AWS services before forwarding the message to an SNS topic or another endpoint. It's a powerful way to build complex, event-driven architectures on AWS.
