@@ -1,0 +1,16 @@
+Yes, you can use AWS EventBridge (formerly known as CloudWatch Events) to orchestrate an event-driven architecture that triggers an AWS Lambda function based on messages arriving in SQS queues. However, the direct integration between SQS and EventBridge for the purpose of triggering events based on message arrival in SQS queues requires a bit of clarification.
+
+As of my last update in April 2023, AWS EventBridge does not directly support triggering events solely based on the arrival of new messages in SQS queues. EventBridge is an event bus service that allows you to route events from AWS services, your own applications, and SaaS applications to targets like AWS Lambda. For many AWS services, EventBridge can directly process events without needing to poll the service, but SQS is somewhat of an exception because it is a polling-based service.
+
+To achieve the functionality where an AWS Lambda is triggered when messages enter any one of 3 SQS queues, you would typically use a combination of AWS services and a slightly different approach:
+
+Direct SQS to Lambda Integration: The most straightforward method to trigger a Lambda function when a message is received is to directly integrate SQS with Lambda. You can configure each of the three SQS queues to trigger the same Lambda function. This setup does not use EventBridge but provides a direct way to process SQS messages with Lambda.
+
+Using EventBridge for Orchestration: If you're looking to use EventBridge for additional orchestration or to filter events, you might consider a pattern where an intermediary service (like AWS Lambda) is used to send custom events to EventBridge based on SQS message processing. For example:
+
+Configure each SQS queue to trigger a Lambda function.
+The Lambda function processes the SQS message and then sends a custom event to EventBridge.
+EventBridge routes the event to the final Lambda function or any other target based on rules you define.
+This approach allows you to leverage EventBridge's powerful event routing and filtering capabilities but does require an initial Lambda function to act as a bridge between SQS and EventBridge.
+
+In summary, while you cannot directly use EventBridge to trigger a Lambda function based on messages arriving in SQS queues without some form of intermediary processing, you can achieve a similar outcome by leveraging the direct integration between SQS and Lambda, possibly combined with EventBridge for more complex event routing and processing needs.
