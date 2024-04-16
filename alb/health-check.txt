@@ -1,0 +1,12 @@
+f your ALB health checks are failing, that's likely the reason why your ECS service isn't functioning as expected. Here are several steps and checks you can perform to resolve issues with health check failures:
+
+Health Check Configuration: Double-check the configuration of your health checks in the ALB target group:
+
+Protocol: Since your service's container listens on HTTP and port 8080, ensure that the health check protocol is HTTP (unless your container is set to redirect HTTP to HTTPS, which might require you to use HTTPS in the health check).
+Port: The port should match the port your service is listening on, which is 8080.
+Path: Verify the path used for health checking. It should point to a valid URL on your application that returns a 200 OK response. Common paths are /, /health, or /api/health, depending on how your application is configured.
+Response Codes: Ensure that the expected response codes in the health check configuration include the response your application provides. For instance, if your application returns a 200 response, ensure this is covered in the health check settings.
+
+Timeouts and Intervals: Check the timeout, interval, and unhealthy threshold settings. Sometimes, if the timeout is too short or the interval too long, your service might not respond quickly enough or often enough to be considered healthy. A typical setup might have a 5-second timeout, with a health check interval of 30 seconds and an unhealthy threshold of 2.
+
+Security Group Rules: Confirm that the security group for your ECS service tasks allows inbound traffic on the health check port (8080 in your case) from the ALB. The security group associated with the ALB should allow this traffic.
