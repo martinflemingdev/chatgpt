@@ -1,35 +1,61 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"log"
+    "context"
+    "fmt"
+    "log"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/organizations"
+    "github.com/aws/aws-sdk-go-v2/aws"
+    "github.com/aws/aws-sdk-go-v2/config"
+    "github.com/aws/aws-sdk-go-v2/service/organizations"
+    "github.com/aws/aws-sdk-go-v2/service/organizations/types"
 )
 
+// NewOrganizationsClient creates and returns an AWS Organizations client.
+func NewOrganizationsClient(cfg aws.Config) *organizations.Client {
+    return organizations.NewFromConfig(cfg)
+}
+
+// ListAccountsWithPagination retrieves all accounts and returns them in a map where the key is the account name and the value is the account ID.
+func ListAccountsWithPagination(ctx context.Context, svc *organizations.Client) (map[string]string, error) {
+    paginator := organizations.NewListAccountsPaginator(svc, &organizations.ListAccountsInput{})
+    accountsMap := make(map[string]string)
+
+    for paginator.HasMorePages() {
+        page, err := paginator.NextPage(ctx)
+        if err != nil {
+            return nil, err // Return the error to the caller
+        }
+
+        for _, account := range page.Accounts {
+            accountsMap[aws.ToString(account.Name)] = aws.ToString(account.Id)
+        }
+    }
+
+    return accountsMap, nil
+}
+
 func main() {
-	// Load the Shared AWS Configuration (~/.aws/config)
-	cfg, err := config.LoadDefaultConfig(context.TODO())
-	if err != nil {
-		log.Fatalf("Unable to load SDK config, %v", err)
-	}
+    ctx := context.TODO()
 
-	// Create an Organizations client
-	svc := organizations.NewFromConfig(cfg)
+    // Load the AWS Configuration
+    cfg, err := config.LoadDefaultConfig(ctx)
+    if err != nil {
+        log.Fatalf("Unable to load SDK config, %v", err)
+    }
 
-	// Use the client to list accounts
-	result, err := svc.ListAccounts(context.TODO(), &organizations.ListAccountsInput{})
-	if err != nil {
-		log.Fatalf("Error listing accounts, %v", err)
-	}
+    // Create an Organizations client
+    svc := NewOrganizationsClient(cfg)
 
-	// Print the account details
-	fmt.Println("Accounts under the AWS Organization:")
-	for _, account := range result.Accounts {
-		fmt.Printf("Account Name: %s, Account Email: %s, Account ID: %s\n",
-			aws.ToString(account.Name), aws.ToString(account.Email), aws.ToString(account.Id))
-	}
+    // List accounts with pagination
+    accounts, err := ListAccountsWithPagination(ctx, svc)
+    if err != nil {
+        log.Fatalf("Failed to list accounts: %v", err)
+    }
+
+    // Print the account details
+    fmt.Println("Accounts under the AWS Organization:")
+    for name, id := range accounts {
+        fmt.Printf("Account Name: %s, Account ID: %s\n", name, id)
+    }
 }
