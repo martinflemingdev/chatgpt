@@ -35,6 +35,14 @@ func ListAccountsWithPagination(ctx context.Context, svc *organizations.Client) 
     return accountsMap, nil
 }
 
+// PrintAccounts prints the accounts from a map where each key is the account name and each value is the account ID.
+func PrintAccounts(accounts map[string]string) {
+    fmt.Println("Accounts under the AWS Organization:")
+    for name, id := range accounts {
+        fmt.Printf("Account Name: %s, Account ID: %s\n", name, id)
+    }
+}
+
 func main() {
     ctx := context.TODO()
 
@@ -53,9 +61,6 @@ func main() {
         log.Fatalf("Failed to list accounts: %v", err)
     }
 
-    // Print the account details
-    fmt.Println("Accounts under the AWS Organization:")
-    for name, id := range accounts {
-        fmt.Printf("Account Name: %s, Account ID: %s\n", name, id)
-    }
+    // Print the account details using PrintAccounts
+    PrintAccounts(accounts)
 }
