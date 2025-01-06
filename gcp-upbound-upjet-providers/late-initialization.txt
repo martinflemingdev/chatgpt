@@ -1,0 +1,69 @@
+First, you’re correct that there’s no explicit hardcoded line in the generated code that says something like:
+
+go
+Copy code
+spec.ForProvider.Access[0].Role = "WRITER"
+spec.ForProvider.Access[0].SpecialGroup = "projectWriters"
+Instead, what you see is this (simplified) snippet:
+
+go
+Copy code
+func (tr *Dataset) LateInitialize(attrs []byte) (bool, error) {
+    params := &DatasetParameters{}
+    if err := json.TFParser.Unmarshal(attrs, params); err != nil {
+        return false, errors.Wrap(err, "failed to unmarshal")
+    }
+    li := resource.NewGenericLateInitializer(...)
+    return li.LateInitialize(&tr.Spec.ForProvider, params)
+}
+This looks fairly generic. It calls json.TFParser.Unmarshal(attrs, params) to get the Terraform/GCP “actual” state and then calls LateInitialize to merge that actual state with your CR’s spec.
+
+So where is the “injection” really happening?
+GCP (or Terraform) supplies the defaults.
+
+When the resource is created in GCP, BigQuery itself sets a default access policy if none is specified (for instance, giving project writers some level of access).
+The Terraform provider sees these default values in the resource’s actual state.
+Upjet picks up those default fields from the Terraform state (attrs).
+
+Inside LateInitialize, Upjet merges missing fields from params (the actual state) into your Spec.ForProvider.
+Because your CR did not specify any access[], the LateInitialize logic sees “no user-specified access,” then sees “GCP has some default access in the actual state,” and merges them in.
+The merging is generic (not a hand-written line in the code).
+
+Upjet uses reflection, JSON tags, and the Terraform schema to figure out that params.Access is set, while spec.ForProvider.Access is empty. It merges them.
+The role “WRITER” and specialGroup “projectWriters” is coming from GCP’s default BigQuery dataset policy, not from hand-coded strings in Crossplane or Upjet.
+The chain of events
+You apply a CR without any access[] config.
+Crossplane/Upjet sees that the resource doesn’t have access[] in the spec, so it creates the BigQuery dataset with minimal config.
+GCP automatically sets or returns default “projectWriters” (and possibly “projectReaders”, “projectOwners”) in the dataset’s IAM policy.
+Terraform’s Refresh or “get” call returns these default roles as part of the dataset’s state.
+Upjet sees that your spec is missing them, runs LateInitialize, and merges the roles into your CR’s spec.forProvider.access.
+You see new fields appear in the CR after the fact.
+That’s what’s happening under the hood. The injection is effectively in:
+
+Terraform state: has the default roles from GCP.
+LateInitialize merges them into your spec.
+The code snippet in your question:
+
+go
+Copy code
+return li.LateInitialize(&tr.Spec.ForProvider, params)
+is precisely where Upjet merges “what’s in params” (the Terraform state) into Spec.ForProvider, but it does so by reflection and JSON structural merging, not by explicit lines of code assigning “WRITER.”
+
+If you dig further…
+You might see the default access roles in:
+
+The Terraform provider’s schema for google_bigquery_dataset, if it has any explicit defaults or “computed” fields that include default values.
+The actual BigQuery API docs, which mention the default access roles for newly created datasets.
+In the Crossplane/Upjet code, it’s all just “unmarshalling the Terraform state” → “late-initializing your CR.” That’s why you don’t see an explicit assignment in dataset.go or dataset_terraform.go; the logic is entirely generic and schema-driven.
+
+
+
+
+
+
+
+
+
+
+
+
