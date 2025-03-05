@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Code Snippets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: "Courier New", monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>YAML Code Snippets</h1>
+
+    <h2>Basic Kubernetes Deployment</h2>
+    <pre><code>
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app
+        image: my-image:latest
+        ports:
+        - containerPort: 80
+    </code></pre>
+
+    <h2>ArgoCD Application Example</h2>
+    <pre><code>
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-argo-app
+  namespace: argocd
+spec:
+  source:
+    repoURL: "https://github.com/myorg/myrepo.git"
+    targetRevision: HEAD
+    path: .
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: my-namespace
+    </code></pre>
+
+</body>
+</html>
