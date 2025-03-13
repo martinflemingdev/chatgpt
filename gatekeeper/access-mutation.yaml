@@ -1,0 +1,13 @@
+apiVersion: mutations.gatekeeper.sh/v1alpha1
+kind: Assign
+metadata:
+  name: set-management-policies
+spec:
+  applyTo:
+    - groups: ["bigquery.gcp.upbound.io"]
+      kinds: ["Dataset"]
+      versions: ["v1beta2"]
+  location: "spec.managementPolicies"
+  parameters:
+    assign:
+      value: ["Create", "Delete", "Observe", "Update"]
