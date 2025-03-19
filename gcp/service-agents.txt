@@ -1,0 +1,2 @@
+​In Google Cloud Platform (GCP), service agents are special service accounts automatically created and managed by Google services to access and manage resources within your projects on behalf of the services. For a detailed overview, refer to GCP's Service Agents documentation.
+https://cloud.google.com/iam/docs/service-agents
