@@ -1,0 +1,15 @@
+apiVersion: pubsub.gcp.upbound.io/v1beta1
+kind: Subscription
+metadata:
+  name: my-subscription
+  annotations:
+    crossplane.io/external-name: my-subscription
+spec:
+  forProvider:
+    topic: my-topic
+    bigQueryConfig:
+      table: projects/YOUR_PROJECT_ID/datasets/my_dataset/tables/my_table
+      useTopicSchema: true
+      writeMetadata: true
+
+# This Pub/Sub Subscription automatically writes messages from my-topic directly into the BigQuery table my_table, eliminating the need for separate compute resources. 
