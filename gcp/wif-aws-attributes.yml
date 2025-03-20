@@ -1,0 +1,4 @@
+google 1: attribute.aws_role
+AWS 1: assertion.arn.contains('assumed-role') ? assertion.arn.extract('{account_arn}assumed-role/') + 'assumed-role/' + assertion.arn.extract('assumed-role/{role_name}/') : assertion.arn
+google 2: google.subject
+AWS 2: assertion.arn
