@@ -1,0 +1,7 @@
+# METADATA
+# title: Your Policy Title
+# description: >-
+#   Detailed description of your policy.
+# custom:
+#   skipConstraint: true
+#   skipTemplate: true
