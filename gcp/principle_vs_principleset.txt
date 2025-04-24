@@ -1,0 +1,29 @@
+principal://... vs principalSet://...
+
+Format	Meaning	Typical Use Case
+principal://...	A single identity (one subject) in a Workload Identity Pool	Used to grant permissions to one federated identity
+principalSet://...	A set of identities (matching an attribute pattern, like AWS role) in a Pool	Used to grant permissions to multiple identities, often by attribute match
+✅ When to use which
+🧍 Use principal:// when:
+You want to grant a GCP IAM role to a specific federated identity — e.g., one AWS role or one OIDC subject:
+
+member: "principal://iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/my-pool/subject/abc@def"
+👥 Use principalSet:// when:
+You want to grant a GCP IAM role to a group of federated identities that match some attribute, like all roles in an AWS account or a specific AWS role:
+
+member: "principalSet://iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/my-pool/attribute.aws_role/arn:aws:iam::111122223333:role/MyRole"
+Or broader:
+
+member: "principalSet://iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/my-pool/attribute.aws_role/arn:aws:iam::111122223333:role/*"
+This one covers all roles in that AWS account.
+
+🚨 Important Note
+Both formats are valid in Crossplane as long as the underlying GCP IAM API accepts them.
+
+They are not interchangeable because:
+
+principal:// is a specific identity
+
+principalSet:// is a pattern matcher or group
+
+So they serve different purposes.
