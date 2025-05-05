@@ -1,0 +1,39 @@
+As of now, Upbound's Crossplane GCP providers do not support creating or managing Cloud KMS Autokey key handles (i.e., resources like folders/…/autokey/…) directly within Kubernetes manifests. 
+This means that the provider does not handle the creation of Autokey key handles as part of resource provisioning.
+
+To use Autokey with Crossplane-managed resources, you need to pre-create the key handle using the Cloud KMS API or gcloud CLI. 
+Once the key handle is created and the key is provisioned, you can reference the fully qualified KMS key URI in your Crossplane resource definitions.
+
+Breakdown of the GCP Autokey Flow (based on the docs)
+Step 1: Create a KeyHandle (via API)
+You send a request like:
+
+POST https://cloudkms.googleapis.com/v1/folders/FOLDER_ID/autokey:initialize
+{
+  "keyHandleId": "my-key-handle",
+  "resourceType": "google.storage.Bucket",
+  "location": "us"
+}
+
+This triggers Autokey to:
+
+Generate a key in the linked key project
+
+Apply IAM bindings automatically
+
+Create a key URI
+
+Step 2: Get the KeyHandle (wait or poll)
+You poll the returned operation to retrieve:
+
+{
+  "kmsKey": "projects/autokey-project/locations/us/keyRings/autokey-keyring/cryptoKeys/my-key-handle-abcd1234"
+}
+
+Step 3: Use That URI in Crossplane
+In your Bucket resource:
+
+spec:
+  forProvider:
+    encryption:
+      defaultKmsKeyName: projects/autokey-project/locations/us/keyRings/autokey-keyring/cryptoKeys/my-key-handle-abcd1234
