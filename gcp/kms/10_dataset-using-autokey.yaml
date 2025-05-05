@@ -1,0 +1,38 @@
+apiVersion: bigquery.gcp.upbound.io/v1beta2
+kind: Dataset
+metadata:
+  name: kmstest
+spec:
+  forProvider:
+    defaultTableExpirationMs: 3600000
+    description: This is a test description
+    friendlyName: test
+    location: EU
+    defaultEncryptionConfiguration:
+      kmsKeyName: folders/373037622747/autokey/keyhandle
+    project: autokey-consumer-project1
+  providerConfigRef:
+    name: gcp-cdmc
+---
+status:
+  atProvider: {}
+  conditions:
+  - lastTransitionTime: "2025-05-05T14:37:28Z"
+    reason: Creating
+    status: "False"
+    type: Ready
+  - lastTransitionTime: "2025-05-05T14:37:28Z"
+    message: 'create failed: async create failed: failed to create the resource: [{0
+      Error creating Dataset: googleapi: Error 400: KMS key should be in the following
+      format: projects/[project]/locations/[location]/keyRings/[ring]/cryptoKeys/[key],
+      invalid  []}]'
+    reason: ReconcileError
+    status: "False"
+    type: Synced
+  - lastTransitionTime: "2025-05-05T14:37:28Z"
+    message: 'async create failed: failed to create the resource: [{0 Error creating
+      Dataset: googleapi: Error 400: KMS key should be in the following format: projects/[project]/locations/[location]/keyRings/[ring]/cryptoKeys/[key],
+      invalid  []}]'
+    reason: AsyncCreateFailure
+    status: "False"
+    type: LastAsyncOperation

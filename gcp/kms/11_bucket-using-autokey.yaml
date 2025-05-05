@@ -1,0 +1,34 @@
+apiVersion: storage.gcp.upbound.io/v1beta2
+kind: Bucket
+metadata:
+  name: autokey-kms-bucket-test
+spec:
+  forProvider:
+    encryption:
+      defaultKmsKeyName: folders/373037622747/autokey/keyhandle
+    location: US
+    project: autokey-consumer-project1
+  providerConfigRef:
+    name: gcp-cdmc
+---
+status:
+  atProvider: {}
+  conditions:
+  - lastTransitionTime: "2025-05-05T14:40:40Z"
+    reason: Creating
+    status: "False"
+    type: Ready
+  - lastTransitionTime: "2025-05-05T14:40:40Z"
+    message: 'create failed: async create failed: failed to create the resource: [{0
+      googleapi: Error 400: Malformed Cloud KMS crypto key: folders/373037622747/autokey/keyhandle,
+      invalid  []}]'
+    reason: ReconcileError
+    status: "False"
+    type: Synced
+  - lastTransitionTime: "2025-05-05T14:40:40Z"
+    message: 'async create failed: failed to create the resource: [{0 googleapi: Error
+      400: Malformed Cloud KMS crypto key: folders/373037622747/autokey/keyhandle,
+      invalid  []}]'
+    reason: AsyncCreateFailure
+    status: "False"
+    type: LastAsyncOperation
